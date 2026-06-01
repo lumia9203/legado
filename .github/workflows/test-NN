@@ -66,7 +66,7 @@ jobs:
           echo "">$GITHUB_WORKSPACE/app/src/main/assets/18PlusList.txt
       - name: Release Apk Sign
         run: |
-          echo "給apk增加簽名"
+          echo "给apk增加签名"
           cp $GITHUB_WORKSPACE/.github/workflows/legado.jks $GITHUB_WORKSPACE/app/legado.jks
           sed '$a\RELEASE_STORE_FILE=./legado.jks'          $GITHUB_WORKSPACE/gradle.properties -i
           sed '$a\RELEASE_KEY_ALIAS=legado'                 $GITHUB_WORKSPACE/gradle.properties -i
@@ -86,9 +86,9 @@ jobs:
             sed "s/'.release'/'.releaseA'/" $GITHUB_WORKSPACE/app/build.gradle  -i
             sed 's/.release/.releaseA/'     $GITHUB_WORKSPACE/app/google-services.json -i
           fi
-          echo "統一版本號"
+          echo "统一版本号"
           sed "/def version/c def version = \"${{ env.VERSION }}\"" $GITHUB_WORKSPACE/app/build.gradle  -i
-          echo "開始${{ env.product }}$typeName構建"
+          echo "开始${{ env.product }}$typeName构建"
           chmod +x gradlew
           ./gradlew assemble${{ env.product }}release --build-cache --parallel --daemon --warning-mode all
           echo "修改APK文件名"
@@ -96,7 +96,7 @@ jobs:
           for file in `ls ${{ github.workspace }}/app/build/outputs/apk/*/*/*.apk`; do
             mv "$file" ${{ github.workspace }}/apk/legado_${{ env.product }}_${{ env.VERSIONL }}_$typeName.apk
           done
-          echo "移動mapping文件"
+          echo "移动mapping文件"
           mkdir -p ${{ github.workspace }}/mapping/
           for file in `ls ${{ github.workspace }}/app/build/outputs/mapping/*/mapping.txt`; do
             mv "$file" ${{ github.workspace }}/mapping/mapping.txt
@@ -104,7 +104,7 @@ jobs:
 
       - name: Move Missing Rules Files
         run: |
-          echo "移動missing_rules.txt文件"
+          echo "移动missing_rules.txt文件"
           mkdir -p ${{ github.workspace }}/mapping/
           for file in `ls ${{ github.workspace }}/app/build/outputs/mapping/*/missing_rules.txt`; do
             mv "$file" ${{ github.workspace }}/mapping/missing_rules.txt
@@ -157,7 +157,6 @@ jobs:
 
       - working-directory: apk/
         run: |
-          # 這裡直接把各目錄下的 apk 提取出來，不再進行中英文替換，保留原本的“原包名”與“共存”
           mv */*.apk .
           rm -rf */
 
